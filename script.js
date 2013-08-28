@@ -5,15 +5,15 @@ var date_words = ["date", "today"];
 var email_words = ["email", "messages", "mail", "mailbox"];
 var stop_words = ["stop", "kill", "end", "never", "mind", "nevermind", "no", "nope"];
 
-var recognition = new webkitSpeechRecognition();
+var recognition = null;
 var finished = false;
 var waiting_for_command = false;
 
 var begin = function() {
+    recognition = new webkitSpeechRecognition();
     recognition.lang = "en";
     var results = "";
     finished = false;
-    recognition = new webkitSpeechRecognition();
 
     recognition.onresult = function(event) {
         console.log("got result:");
