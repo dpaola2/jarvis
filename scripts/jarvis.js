@@ -7,8 +7,7 @@ function JarvisController ($scope) {
         r.continuous = true;
         r.onerror = function(error) {
             console.log(error);
-            $scope.recognition = $scope.newRecognition();
-            $scope.startListening();
+            $scope.stopListening();
         };
 
         r.onend = function() {
@@ -64,6 +63,15 @@ function JarvisController ($scope) {
         return stmts[stmts.length - 1][0]
     };
 
+    $scope.analysis = function() {
+        r = sentiment.analyze($scope.statement());
+        if (r.score > 0) {
+            return r.score + " positive";
+        } else {
+            return r.score + " negative";
+        }
+    };
+
     $scope.say = function(message) {
         $scope.stopListening();
         speak(message, {}, function() {
@@ -80,7 +88,7 @@ function JarvisController ($scope) {
     $scope.stopListening = function() {
         $scope.running = false;
         $scope.recognition.stop();
-    }
+    };
 
     $scope.statements = [["speak now", classify("speak now")]];
     $scope.running = false;
