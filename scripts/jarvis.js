@@ -1,4 +1,4 @@
-require(["scripts/angular.min.js"]);
+require(["scripts/angular.min.js", "scripts/moment.min.js"]);
 
 var call_function = function(stmt) {
     return "I am unable to make calls at this time.";
@@ -7,37 +7,46 @@ var call_function = function(stmt) {
 var pull_function = function(stmt) {
     var subject = resolveSubject(stmt);
     if (subject == null) {
-        return "Sorry, I don't understand " + stmt.subject
+        return "Sorry, I don't understand " + stmt.subject;
     } else {
-        return "Here is the information you requested regarding " + stmt.subject + ": " + subject.speakable()
+        return "Here is the information you requested regarding " + stmt.subject + ": " + subject.speakable(stmt);
     }
 };
 
 var find_function = function(stmt) {
-
+    return "Unfortunately I can't find things yet! Maybe try google?";
 };
 
 var send_function = function(stmt) {
-
+    return "If you bought Dave a few beers, maybe this feature would be complete!"
 };
 
 var create_function = function(stmt) {
-
+    return "I haven't been programmed with the ability to create. Dave is so, so cruel.";
 };
 
 var notify_function = function(stmt) {
-
+    return "I would, but I don't have that ability yet."
 };
 
 var do_function = function(stmt) {
-
+    return "I'm still a prototype, so I can't do that yet."
 };
 
 var is_function = function(stmt) {
-
+    var subject = resolveSubject(stmt);
+    if (subject == null) {
+        return "I don't know what you mean by " + stmt.subject;
+    } else {
+        return "It is " + subject.speakable(stmt);
+    }
 };
 
-var jarvisVerbs = ["call", "pull", "find", "search", "send", "locate", "create", "notify", "make", "do", "is"];
+var play_function = function(stmt) {
+    return "You'll need to load my music module to do that.";
+};
+
+var jarvisVerbs = ["show", "display", "call", "pull", "find", "search", "send", "locate", "create", "notify", "make", "do", "is", "are", "set"];
 var commands = {
     "call": call_function,
     "pull": pull_function,
@@ -49,15 +58,50 @@ var commands = {
     "notify": notify_function,
     "make": create_function,
     "do": do_function,
-    "is": is_function
+    "is": is_function,
+    "are": is_function,
+    "show": pull_function,
+    "display": pull_function,
+    "set": create_function
 };
-var jarvisSubjects = ["messages", "time", "weather", "calendar", "schedule", "appointment"];
+var jarvisSubjects = ["messages", "message", "time", "the time", "weather", "the weather", "calendar", "schedule", "my schedule", "first appointment", "next appointment", "appointment", "appointments", "my appointments", "day", "the day", "the date", "date"];
 var subjects = {};
 subjects["weather"] = {
-    speakable: function() {
-        return "partly cloud with a chance of rain";
+    speakable: function(stmt) {
+        return "partly cloud with a chance of rain, with a high of 70 degrees";
     }
 };
+subjects["the weather"] = subjects["weather"];
+subjects["time"] = {
+    speakable: function(stmt) {
+        return moment().format('LLLL');
+    }
+};
+subjects["the time"] = subjects["time"];
+subjects["day"] = subjects["time"];
+subjects["the day"] = subjects["time"];
+subjects["date"] = subjects["time"];
+subjects["the date"] = subjects["time"];
+subjects["calendar"] = {
+    speakable: function(stmt) {
+        if (checkForIn(stmt.nouns, "tomorrow") == true) {
+            return "for tomorrow, you have several meetings scheduled, including an interview at 10 AM";
+        } else {
+            return "you have no more meetings today";
+        }
+    }
+};
+subjects["schedule"] = subjects["calendar"];
+subjects["my schedule"] = subjects["calendar"];
+subjects["appointments"] = subjects["calendar"];
+subjects["my appointments"] = subjects["calendar"];
+subjects["appointment"] = {
+    speakable: function(stmt) {
+        return "your first appointment is an interview at Bloc at 10 AM in the morning";
+    }
+};
+subjects["next appointment"] = subjects["appointment"];
+subjects["first appointment"] = subjects["appointment"];
 
 var resolveSubject = function(stmt) {
     for (var i = 0; i < jarvisSubjects.length; ++i) {
@@ -88,7 +132,7 @@ var takeAction = function(stmt) {
             return commands[verb](stmt);
         }
     }
-    return "Invalid command.";
+    return "I am still learning, please be patient.";
 };
 
 function JarvisController ($scope) {
@@ -183,7 +227,7 @@ function JarvisController ($scope) {
 
     $scope.say = function(message) {
         $scope.stopListening();
-        speak(message, {}, function() {
+        speak(message, {pitch: 50, amplitude: 100, speed: 175}, function() {
             $scope.startListening();
         });
     };
