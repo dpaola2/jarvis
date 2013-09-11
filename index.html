@@ -1,12 +1,21 @@
-<html>
+<html ng-app>
   <head>
+    <script data-main="scripts/jarvis.js" src="scripts/require.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="scripts/speakeasy.js"></script>
   </head>
   <body>
     <embed src="beep.wav" autostart="false" width="0" height="0" id="beep" enablejavascript="true" />
     <script src="speakClient.js"></script>
     <script src="speakGenerator.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script type="text/javascript" src="script.js"></script>
     <div id="audio"></div>
+    <div ng-controller="JarvisController" id="jarvis_controller">
+      <h2>Status: {{ status() }}</h2>
+      <a href="" ng-click="toggleJarvis()">Toggle Jarvis</a>
+      <p>Action: <b>{{ action() }}</b></p>
+      <p>Owner: <b>{{ owner() }}</b></p>
+      <p>Subject: <b>{{ subject() }}</b></p>
+      <p>Statement: <b>{{ statement() }}</b></p>
+    </div>
   </body>
 </html>

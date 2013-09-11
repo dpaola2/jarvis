@@ -5,13 +5,12 @@ var date_words = ["date", "today"];
 var email_words = ["email", "messages", "mail", "mailbox"];
 var stop_words = ["stop", "kill", "end", "never", "mind", "nevermind", "no", "nope"];
 
-var recognition = null;
+var recognition = new webkitSpeechRecognition();
+recognition.lang = "en";
 var finished = false;
 var waiting_for_command = false;
 
 var begin = function() {
-    recognition = new webkitSpeechRecognition();
-    recognition.lang = "en";
     var results = "";
     finished = false;
 
@@ -38,7 +37,7 @@ var begin = function() {
                 // accept commands
                 speak("Yes sir?", {}, function() {
                     if (finished == false) {
-                        begin();
+                        recognition.start();
                         beep();
                     }
                 });
@@ -46,7 +45,7 @@ var begin = function() {
                 // ignore the input
                 console.log("ignoring input");
                 if (finished == false) {
-                    begin();
+                    recognition.start();
                 }
             }
         } else { // parse a command
@@ -125,7 +124,7 @@ var begin = function() {
             var message = "Today is " + day_of_the_week + " " + month + " " + day +". Is there anything else?";
             speak(message, {}, function (){
                 if (finished == false) {
-                    begin();
+                    recognition.start();
                 }
             });
         },
@@ -134,14 +133,14 @@ var begin = function() {
             var now = new Date();
             speak(the_time, {}, function() {
                 if (finished == false) {
-                    begin();
+                    recognition.start();
                 }
             });
         },
         "email": function() {
             speak("Sorry sir, but I can't seem to access your email. Is there anything else?", {}, function() {
                 if (finished == false) {
-                    begin();
+                    recognition.start();
                 }
             });
         },
@@ -149,14 +148,14 @@ var begin = function() {
             speak("Okay sir", {}, function() {
                 waiting_for_command = false;
                 if (finished == false) {
-                    begin();
+                    recognition.start();
                 }
             });
         },
         "invalid": function() {
             speak("Unrecognized command", {}, function() {
                 if (finished == false) {
-                    begin();
+                    recognition.start();
                     beep();
                 }
             });
