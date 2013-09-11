@@ -12,10 +12,12 @@
     <div ng-controller="JarvisController" id="jarvis_controller">
       <h2>Status: {{ status() }}</h2>
       <a href="" ng-click="toggleJarvis()">Toggle Jarvis</a>
-      <p>Action: <b>{{ action() }}</b></p>
-      <p>Owner: <b>{{ owner() }}</b></p>
+      <h3>Statement: <b>{{ statement() }}</b></p>
+      <h3>Analysis</h3>
       <p>Subject: <b>{{ subject() }}</b></p>
-      <p>Statement: <b>{{ statement() }}</b></p>
+      <p>Owner: <b>{{ owner() }}</b></p>
+      <p>Action: <b>{{ action() }}</b></p>
+      <p>Verbs: <b>{{ verbs() }}</b></p>
       <p>Analysis: <b>{{ analysis() }}</b></p>
     </div>
   </body>

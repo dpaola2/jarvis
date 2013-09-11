@@ -50,17 +50,22 @@ function JarvisController ($scope) {
 
     $scope.owner = function() {
         stmts = $scope.statements;
-        return stmts[stmts.length - 1][1].owner
+        return stmts[stmts.length - 1][1].owner;
     };
 
     $scope.subject = function() {
         stmts = $scope.statements;
-        return stmts[stmts.length - 1][1].subject
+        return stmts[stmts.length - 1][1].subject;
     };
 
     $scope.statement = function() {
         stmts = $scope.statements;
-        return stmts[stmts.length - 1][0]
+        return stmts[stmts.length - 1][0];
+    };
+
+    $scope.verbs = function() {
+        stmts = $scope.statements;
+        return stmts[stmts.length - 1][1].verbs;
     };
 
     $scope.analysis = function() {
