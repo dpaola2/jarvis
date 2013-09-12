@@ -25,7 +25,7 @@ function JarvisController ($scope) {
                 $scope.statements.push([results, classified]);
             });
             $scope.stopListening();
-            result = Verb.find(classified.verbs).computeResult(classified);
+            result = Subject.find(classified.subject).computeResult(classified);
             message = result.message;
             if (score < 0) {
                 message = message + ". You should be happier, by the way. At least you have a soul!";

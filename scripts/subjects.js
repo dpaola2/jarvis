@@ -3,7 +3,7 @@ function Subject(nouns) {
     this.computeResult = function(stmt) {
         console.log("computeResult() invoked on abstract Subject");
         return {
-            message: "abstract subject",
+            message: "Sorry, but I don't understand, " + stmt.subject,
             action: function() {
                 console.log("abstract subject");
             }
@@ -17,7 +17,7 @@ Subject.find = function(input_subject) {
             return this.subjects[i];
         }
     }
-    return null;
+    return new Subject();
 };
 
 Subject.subjects = [];
