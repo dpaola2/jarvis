@@ -5,7 +5,26 @@ function JarvisController ($scope) {
         r.continuous = true;
         r.onerror = function(error) {
             console.log(error);
-            $scope.stopListening();
+            var stop = false;
+            var message = false;
+
+            if (error.error == "network") {
+                message = "Sir, there seems to be a network error. I will be asleep.";
+                stop = true;
+            } else if (error.error == "no-speech") {
+                message = "Sir, let me know if you need me.";
+                stop = true;
+            } else if (error.error == "aborted") {
+                stop = true;
+            }
+            if (stop == true) {
+                $scope.$apply(function() {
+                    $scope.stopListening();
+                });
+            }
+            if (message != false) {
+                $scope.say(message);
+            }
         };
 
         r.onend = function() {
@@ -99,7 +118,9 @@ function JarvisController ($scope) {
     $scope.say = function(message) {
         $scope.stopListening();
         speak(message, {pitch: 50, amplitude: 100, speed: 175}, function() {
-            $scope.startListening();
+            if ($scope.running) {
+                $scope.startListening();
+            }
         });
     };
 
