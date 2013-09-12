@@ -1,6 +1,3 @@
-var call_function = function(stmt) {
-    return "I am unable to make calls at this time.";
-};
 
 var pull_function = function(stmt) {
     var subject = Subject.find(stmt.subject);
@@ -48,7 +45,6 @@ var play_function = function(stmt) {
 
 var jarvisVerbs = ["show", "display", "call", "pull", "find", "search", "send", "locate", "create", "notify", "make", "do", "is", "are", "set"];
 var commands = {
-    "call": call_function,
     "pull": pull_function,
     "find": find_function,
     "search": find_function,
@@ -64,3 +60,32 @@ var commands = {
     "display": pull_function,
     "set": create_function
 };
+
+function Verb(verbs) {
+    this.verbs = verbs;
+    this.computeResult = function(stmt) {
+        return {
+            message: "I do not understand, I'm sorry",
+            action: function() {console.log("computeResult() invoked on an abstract Verb");}
+        };
+    };
+}
+
+Verb.find = function(input_verbs) {
+    for (var i = 0; i < this.verbs.length; ++i) {
+        for (var j = 0; j < input_verbs.length; ++j) {
+            if (checkForIn(this.verbs[i].verbs, input_verbs[j]) == true) {
+                return this.verbs[i];
+            }
+        }
+    }
+    return new Verb();
+};
+
+Verb.verbs = [];
+
+require(
+    [
+        "scripts/verbs/call.js"
+    ]
+);
