@@ -156,11 +156,18 @@ function JarvisController ($scope) {
                 results = event.results[i][0].transcript;
             }
             var classified = classify(results);
+            var score = sentiment.analyze(results).score;
             console.log(classified);
             $scope.$apply(function() {
                 $scope.statements.push([results, classified]);
             });
-            speak(takeAction(classified), {}, function() {});
+            $scope.stopListening();
+            message = takeAction(classified);
+            if (score < 0) {
+                message = message + ". You should be happier, by the way. At least you have a soul!";
+            }
+            $scope.say(message);
+            $scope.startListening();
         };
         return r;
     };
