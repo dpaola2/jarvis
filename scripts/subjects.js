@@ -1,47 +1,36 @@
-var jarvisSubjects = ["messages", "message", "time", "the time", "weather", "the weather", "calendar", "schedule", "my schedule", "first appointment", "next appointment", "appointment", "appointments", "my appointments", "day", "the day", "the date", "date"];
-var subjects = {};
-subjects["weather"] = {
-    speakable: function(stmt) {
-        return "partly cloud with a chance of rain, with a high of 70 degrees";
-    }
-};
-subjects["the weather"] = subjects["weather"];
-subjects["time"] = {
-    speakable: function(stmt) {
-        return moment().format('LLLL');
-    }
-};
-subjects["the time"] = subjects["time"];
-subjects["day"] = subjects["time"];
-subjects["the day"] = subjects["time"];
-subjects["date"] = subjects["time"];
-subjects["the date"] = subjects["time"];
-subjects["calendar"] = {
-    speakable: function(stmt) {
-        if (checkForIn(stmt.nouns, "tomorrow") == true) {
-            return "for tomorrow, you have several meetings scheduled, including an interview at 10 AM";
-        } else {
-            return "you have no more meetings today";
-        }
-    }
-};
-subjects["schedule"] = subjects["calendar"];
-subjects["my schedule"] = subjects["calendar"];
-subjects["appointments"] = subjects["calendar"];
-subjects["my appointments"] = subjects["calendar"];
-subjects["appointment"] = {
-    speakable: function(stmt) {
-        return "your first appointment is an interview at Bloc at 10 AM in the morning";
-    }
-};
-subjects["next appointment"] = subjects["appointment"];
-subjects["first appointment"] = subjects["appointment"];
+function Subject(nouns) {
+    this.nouns = nouns;
+    this.computeResult = function(stmt) {
+        console.log("computeResult() invoked on abstract Subject");
+        return {
+            message: "abstract subject",
+            action: function() {
+                console.log("abstract subject");
+            }
+        };
+    };
+}
 
-var resolveSubject = function(stmt) {
-    for (var i = 0; i < jarvisSubjects.length; ++i) {
-        if (checkForIn(jarvisSubjects, stmt.subject) == true) {
-            return subjects[stmt.subject];
+Subject.prototype.exec = function(stmt) {
+    return this.computeResult(stmt);
+};
+
+Subject.find = function(input_subject) {
+    console.log("trying to find a subject that matches '" + input_subject + "'");
+    for (var i = 0; i < this.subjects.length; ++i) {
+        console.log("is '" + input_subject + "' in: " + this.subjects[i].nouns + "?");
+        if (checkForIn(this.subjects[i].nouns, input_subject) == true) {
+            return this.subjects[i];
         }
     }
     return null;
 };
+
+Subject.subjects = [];
+
+require(
+    [
+        "scripts/subjects/weather.js",
+        "scripts/subjects/datetime.js"
+    ]
+);

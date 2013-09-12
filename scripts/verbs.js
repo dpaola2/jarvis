@@ -3,11 +3,12 @@ var call_function = function(stmt) {
 };
 
 var pull_function = function(stmt) {
-    var subject = resolveSubject(stmt);
+    var subject = Subject.find(stmt.subject);
     if (subject == null) {
         return "Sorry, I don't understand " + stmt.subject;
     } else {
-        return "Here is the information you requested regarding " + stmt.subject + ": " + subject.speakable(stmt);
+        result = subject.computeResult(stmt);
+        return "Here is the information you requested regarding " + stmt.subject + ": " + result.message;
     }
 };
 
@@ -32,11 +33,12 @@ var do_function = function(stmt) {
 };
 
 var is_function = function(stmt) {
-    var subject = resolveSubject(stmt);
+    var subject = Subject.find(stmt.subject);
     if (subject == null) {
         return "I don't know what you mean by " + stmt.subject;
     } else {
-        return "It is " + subject.speakable(stmt);
+        result = subject.computeResult(stmt);
+        return "It is " + result.message;
     }
 };
 

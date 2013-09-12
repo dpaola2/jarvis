@@ -1,4 +1,3 @@
-
 function JarvisController ($scope) {
     $scope.newRecognition = function() {
         var r = new webkitSpeechRecognition();
