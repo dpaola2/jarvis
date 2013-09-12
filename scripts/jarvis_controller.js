@@ -100,8 +100,10 @@ function JarvisController ($scope) {
         r = sentiment.analyze($scope.statement());
         if (r.score > 0) {
             return r.score + " positive";
-        } else {
+        } else if (r.score < 0) {
             return r.score + " negative";
+        } else {
+            return "neutral";
         }
     };
 
