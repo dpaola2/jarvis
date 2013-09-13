@@ -26,12 +26,15 @@
             <td>{{ result }}</td>
           </tr>
         </table>
-        <div ng-show="readingList.visible">
-          <table class="table">
-            <tr ng-repeat="book in readingList.books">
-              <td>{{ book }}</td>
-            </tr>
-          </table>
+        <div ng-show="readingList.visible" class="panel panel-primary">
+          <div class="panel-heading">Reading List</div>
+          <div class="panel-body">
+            <table class="table">
+              <tr ng-repeat="book in readingList.books">
+                <td>{{ book }}</td>
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
