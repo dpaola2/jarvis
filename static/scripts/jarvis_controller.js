@@ -29,12 +29,13 @@ function JarvisController ($scope) {
 
         r.onresult = function(event) {
             for (var i = event.resultIndex; i < event.results.length; ++i) {
-                results = event.results[i][0].transcript;
+                $scope.results = event.results[i][0].transcript;
             }
             // send to wit.ai
             // console.log the resulting json
-            $scope.wit(results, function(result) {
-                console.log("got here!");
+            $scope.wit($scope.results, function(result) {
+                console.log(result);
+                $scope.outcome = result.outcome;
                 $scope.$apply(function() {
                     $scope.stopListening();
                 });
@@ -45,9 +46,22 @@ function JarvisController ($scope) {
     };
 
     $scope.wit = function(sentence, callback) {
-        $.getJSON("/wit", {sentence: results}, function(data, status, jqxhr) {
+        $.getJSON("/wit", {sentence: sentence}, function(data, status, jqxhr) {
             console.log(data.outcome.intent);
-            // say the response here
+            var message = "I don't understand.";
+            if (data.outcome.intent == "hide_reading_list") {
+                $scope.$apply(function() {
+                    $scope.readingList.visible = false;
+                });
+                var message = "Okay.";
+            } else if (data.outcome.intent == "show_reading_list") {
+                $scope.$apply(function() {
+                    $scope.readingList.visible = true;
+                });
+                var message = "Okay.";
+            }
+            $scope.result = message;
+            $scope.say(message);
             callback(data);
         });
     };
@@ -69,12 +83,7 @@ function JarvisController ($scope) {
     };
 
     $scope.say = function(message) {
-        $scope.stopListening();
-        speak(message, {pitch: 50, amplitude: 100, speed: 175}, function() {
-            if ($scope.running) {
-                $scope.startListening();
-            }
-        });
+        speak(message, {pitch: 50, amplitude: 100, speed: 175}, function() {});
     };
 
     $scope.startListening = function() {
@@ -90,5 +99,6 @@ function JarvisController ($scope) {
 
     $scope.running = false;
     $scope.recognition = $scope.newRecognition();
+    $scope.readingList = new ReadingList();
 }
 

@@ -15,6 +15,24 @@
       <div ng-controller="JarvisController" id="jarvis_controller">
         <h2>Status: {{ status() }}</h2>
         <button type="button" class="btn btn-primary" ng-click="toggleJarvis()">Toggle Jarvis</button>
+        <h3>Interpretation</h3>
+        <table class="table">
+          <tr>
+            <td>Intent</td>
+            <td><pre>{{ outcome.intent }}</pre></td>
+          </tr>
+          <tr>
+            <td>Result</td>
+            <td>{{ result }}</td>
+          </tr>
+        </table>
+        <div ng-show="readingList.visible">
+          <table class="table">
+            <tr ng-repeat="book in readingList.books">
+              <td>{{ book }}</td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
   </body>
