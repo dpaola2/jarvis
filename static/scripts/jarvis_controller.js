@@ -53,12 +53,22 @@ function JarvisController ($scope) {
                 $scope.$apply(function() {
                     $scope.readingList.visible = false;
                 });
-                var message = "Okay.";
+                var message = "I hid your reading list for you.";
             } else if (data.outcome.intent == "show_reading_list") {
                 $scope.$apply(function() {
                     $scope.readingList.visible = true;
                 });
-                var message = "Okay.";
+                var message = "Your reading list should be displayed.";
+            } else if (data.outcome.intent == "show_thermostat") {
+                $scope.$apply(function() {
+                    $scope.thermostat.visible = true;
+                });
+                var message = "It should be showing up now.";
+            } else if (data.outcome.intent == "hide_thermostat") {
+                $scope.$apply(function() {
+                    $scope.thermostat.visible = false;
+                });                
+                var message = "Your thermostat is hidden.";
             }
             $scope.result = message;
             $scope.say(message);
@@ -99,6 +109,8 @@ function JarvisController ($scope) {
 
     $scope.running = false;
     $scope.recognition = $scope.newRecognition();
+
     $scope.readingList = new ReadingList();
+    $scope.thermostat = new Thermostat();
 }
 

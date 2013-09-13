@@ -5,7 +5,9 @@ require(
         "static/scripts/jarvis_controller.js"
     ], 
     function() {
-        require(["static/scripts/angular.min.js"]);
+        require(["static/scripts/angular.min.js"], function() {
+            require([, "static/scripts/angular-resource.min.js"]);
+        });
     }
 );
         

@@ -26,14 +26,27 @@
             <td>{{ result }}</td>
           </tr>
         </table>
-        <div ng-show="readingList.visible" class="panel panel-primary">
-          <div class="panel-heading">Reading List</div>
-          <div class="panel-body">
-            <table class="table">
-              <tr ng-repeat="book in readingList.books">
-                <td>{{ book }}</td>
-              </tr>
-            </table>
+
+        <div ng-show="thermostat.visible" class="col-md-3">
+          <div class="panel panel-primary">
+            <div class="panel-heading">Thermostat</div>
+            <div class="panel-body">
+              <p>Current temperature: <b>{{ thermostat.temperature }}</b></p>
+              <p>Target temperature: <b>{{ thermostat.target }}</b></p>
+            </div>
+          </div>
+        </div>
+        
+        <div ng-show="readingList.visible" class="col-md-5">
+          <div class="panel panel-primary">
+            <div class="panel-heading">Reading List</div>
+            <div class="panel-body">
+              <table class="table">
+                <tr ng-repeat="book in readingList.books">
+                  <td>{{ book }}</td>
+                </tr>
+              </table>
+            </div>
           </div>
         </div>
       </div>
