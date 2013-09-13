@@ -24,8 +24,8 @@ Subject.subjects = [];
 
 require(
     [
-        "scripts/subjects/weather.js",
-        "scripts/subjects/datetime.js",
-        "scripts/subjects/you.js"
+        "static/scripts/subjects/weather.js",
+        "static/scripts/subjects/datetime.js",
+        "static/scripts/subjects/you.js"
     ]
 );

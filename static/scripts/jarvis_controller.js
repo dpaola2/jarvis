@@ -2,7 +2,7 @@ function JarvisController ($scope) {
     $scope.newRecognition = function() {
         var r = new webkitSpeechRecognition();
         r.lang = "en";
-        r.continuous = true;
+        r.continuous = false;
         r.onerror = function(error) {
             console.log(error);
             var stop = false;
@@ -27,31 +27,18 @@ function JarvisController ($scope) {
             }
         };
 
-        r.onend = function() {
-            if ($scope.running == true) {
-                $scope.startListening();
-            }
-        };
-
         r.onresult = function(event) {
             for (var i = event.resultIndex; i < event.results.length; ++i) {
                 results = event.results[i][0].transcript;
             }
-            var classified = classify(results);
-            var score = sentiment.analyze(results).score;
-            console.log(classified);
-            $scope.$apply(function() {
-                $scope.statements.push([results, classified]);
+            // send to wit.ai
+            // console.log the resulting json
+            $.getJSON("/wit", {sentence: results}, function(data, status, jqxhr) {
+                console.log(data.outcome.intent);
+                // say the response here
             });
-            $scope.stopListening();
-            result = Subject.find(classified.subject).computeResult(classified);
-            message = result.message;
-            if (score < 0) {
-                message = message + ". You should be happier, by the way. At least you have a soul!";
-            }
-            $scope.say(message);
-            $scope.startListening();
         };
+
         return r;
     };
 

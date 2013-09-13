@@ -17,12 +17,12 @@ Verb.verbs = [];
 
 require(
     [
-        "scripts/verbs/call.js",
-        "scripts/verbs/pull.js",
-        "scripts/verbs/is.js",
-        "scripts/verbs/find.js",
-        "scripts/verbs/create.js",
-        "scripts/verbs/send.js",
-        "scripts/verbs/do.js"
+        "static/scripts/verbs/call.js",
+        "static/scripts/verbs/pull.js",
+        "static/scripts/verbs/is.js",
+        "static/scripts/verbs/find.js",
+        "static/scripts/verbs/create.js",
+        "static/scripts/verbs/send.js",
+        "static/scripts/verbs/do.js"
     ]
 );
