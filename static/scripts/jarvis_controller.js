@@ -33,13 +33,23 @@ function JarvisController ($scope) {
             }
             // send to wit.ai
             // console.log the resulting json
-            $.getJSON("/wit", {sentence: results}, function(data, status, jqxhr) {
-                console.log(data.outcome.intent);
-                // say the response here
+            $scope.wit(results, function(result) {
+                console.log("got here!");
+                $scope.$apply(function() {
+                    $scope.stopListening();
+                });
             });
         };
 
         return r;
+    };
+
+    $scope.wit = function(sentence, callback) {
+        $.getJSON("/wit", {sentence: results}, function(data, status, jqxhr) {
+            console.log(data.outcome.intent);
+            // say the response here
+            callback(data);
+        });
     };
 
     $scope.toggleJarvis = function() {
@@ -56,52 +66,6 @@ function JarvisController ($scope) {
         } else {
             return "Not Listening";
         }
-    };
-
-    $scope.action = function() {
-        stmts = $scope.statements;
-        return stmts[stmts.length - 1][1].action
-    };
-
-    $scope.owner = function() {
-        stmts = $scope.statements;
-        return stmts[stmts.length - 1][1].owner;
-    };
-
-    $scope.subject = function() {
-        stmts = $scope.statements;
-        return stmts[stmts.length - 1][1].subject;
-    };
-
-    $scope.statement = function() {
-        stmts = $scope.statements;
-        return stmts[stmts.length - 1][0];
-    };
-
-    $scope.verbs = function() {
-        stmts = $scope.statements;
-        return stmts[stmts.length - 1][1].verbs;
-    };
-
-    $scope.analysis = function() {
-        r = sentiment.analyze($scope.statement());
-        if (r.score > 0) {
-            return r.score + " positive";
-        } else if (r.score < 0) {
-            return r.score + " negative";
-        } else {
-            return "neutral";
-        }
-    };
-
-    $scope.nouns = function() {
-        stmts = $scope.statements;
-        return stmts[stmts.length - 1][1].nouns;
-    };
-
-    $scope.adjectives = function() {
-        stmts = $scope.statements;
-        return stmts[stmts.length - 1][1].adjectives;
     };
 
     $scope.say = function(message) {
@@ -124,7 +88,6 @@ function JarvisController ($scope) {
         $scope.recognition.stop();
     };
 
-    $scope.statements = [["speak now", classify("speak now")]];
     $scope.running = false;
     $scope.recognition = $scope.newRecognition();
 }

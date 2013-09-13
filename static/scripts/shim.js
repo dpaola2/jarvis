@@ -1,1 +1,0 @@
-sp = require('./speakeasy-nlp');
