@@ -92,10 +92,12 @@ function JarvisController ($scope, $http) {
     $scope.thermostat = new Thermostat($http);
     $scope.readingList = new ReadingList();
     $scope.weather = new WeatherService($http);
+    $scope.alarm = new AlarmService();
     $scope.services.add([
         $scope.readingList,
         $scope.thermostat,
-        $scope.weather
+        $scope.weather,
+        $scope.alarm
     ]);
 }
 
