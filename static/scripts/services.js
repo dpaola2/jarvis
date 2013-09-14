@@ -5,13 +5,13 @@ function ReadingList() {
 ReadingList.prototype.books = ["Little House on the Prairie", "Catch 22"];
 ReadingList.prototype.visible = false;
 
-function Thermostat() {
+function Thermostat($http) {
     var self = this;
 
     var to_f = function(c) {
         return Math.round(c * (9/5) + 32);
     };
-    $.getJSON("/nest", {}, function(data, status, xhr) {
+    $http.get("/nest").success(function(data, status, headers, config) {
         self.status = data;
         self.structureId = "6b85dd90-402c-11e2-b926-12313d0968a6";
         self.deviceId = self.status.structure[self.structureId].devices[0];
@@ -24,4 +24,4 @@ function Thermostat() {
     });
 };
 
-Thermostat.prototype.visible = false;
+Thermostat.prototype.visible = true;

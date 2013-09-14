@@ -1,4 +1,4 @@
-function JarvisController ($scope) {
+function JarvisController ($scope, $http) {
     $scope.newRecognition = function() {
         var r = new webkitSpeechRecognition();
         r.lang = "en";
@@ -36,9 +36,7 @@ function JarvisController ($scope) {
             $scope.wit($scope.results, function(result) {
                 console.log(result);
                 $scope.outcome = result.outcome;
-                $scope.$apply(function() {
-                    $scope.stopListening();
-                });
+                $scope.stopListening();
             });
         };
 
@@ -46,28 +44,21 @@ function JarvisController ($scope) {
     };
 
     $scope.wit = function(sentence, callback) {
-        $.getJSON("/wit", {sentence: sentence}, function(data, status, jqxhr) {
+        $http({url: "/wit", method: 'GET', params: {sentence: sentence}}).success(function(data, status, headers, config) {
+//        $.getJSON("/wit", {sentence: sentence}, function(data, status, jqxhr) {
             console.log(data.outcome.intent);
             var message = "I don't understand.";
             if (data.outcome.intent == "hide_reading_list") {
-                $scope.$apply(function() {
-                    $scope.readingList.visible = false;
-                });
+                $scope.readingList.visible = false;
                 var message = "I hid your reading list for you.";
             } else if (data.outcome.intent == "show_reading_list") {
-                $scope.$apply(function() {
-                    $scope.readingList.visible = true;
-                });
+                $scope.readingList.visible = true;
                 var message = "Your reading list should be displayed.";
             } else if (data.outcome.intent == "show_thermostat") {
-                $scope.$apply(function() {
-                    $scope.thermostat.visible = true;
-                });
+                $scope.thermostat.visible = true;
                 var message = "It should be showing up now.";
             } else if (data.outcome.intent == "hide_thermostat") {
-                $scope.$apply(function() {
-                    $scope.thermostat.visible = false;
-                });                
+                $scope.thermostat.visible = false;
                 var message = "Your thermostat is hidden.";
             }
             $scope.result = message;
@@ -111,6 +102,6 @@ function JarvisController ($scope) {
     $scope.recognition = $scope.newRecognition();
 
     $scope.readingList = new ReadingList();
-    $scope.thermostat = new Thermostat();
+    $scope.thermostat = new Thermostat($http);
 }
 
