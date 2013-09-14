@@ -33,10 +33,15 @@ function JarvisController ($scope, $http) {
             }
             // send to wit.ai
             // console.log the resulting json
-            $scope.wit($scope.results, function(result) {
-                console.log(result);
-                $scope.outcome = result.outcome;
+            $scope.wit($scope.results, function(data) {
+                console.log("[JARVIS] Intent: " + data.outcome.intent);
+                var service_obj = $scope.services.lookup(data.outcome.intent);
+                var message = service_obj.send(data.outcome.intent);
+
+                $scope.result = message;
+                $scope.outcome = data.outcome;
                 $scope.stopListening();
+                $scope.say(message);
             });
         };
 
@@ -45,24 +50,6 @@ function JarvisController ($scope, $http) {
 
     $scope.wit = function(sentence, callback) {
         $http({url: "/wit", method: 'GET', params: {sentence: sentence}}).success(function(data, status, headers, config) {
-//        $.getJSON("/wit", {sentence: sentence}, function(data, status, jqxhr) {
-            console.log(data.outcome.intent);
-            var message = "I don't understand.";
-            if (data.outcome.intent == "hide_reading_list") {
-                $scope.readingList.visible = false;
-                var message = "I hid your reading list for you.";
-            } else if (data.outcome.intent == "show_reading_list") {
-                $scope.readingList.visible = true;
-                var message = "Your reading list should be displayed.";
-            } else if (data.outcome.intent == "show_thermostat") {
-                $scope.thermostat.visible = true;
-                var message = "It should be showing up now.";
-            } else if (data.outcome.intent == "hide_thermostat") {
-                $scope.thermostat.visible = false;
-                var message = "Your thermostat is hidden.";
-            }
-            $scope.result = message;
-            $scope.say(message);
             callback(data);
         });
     };
@@ -100,8 +87,13 @@ function JarvisController ($scope, $http) {
 
     $scope.running = false;
     $scope.recognition = $scope.newRecognition();
-
-    $scope.readingList = new ReadingList();
+    
+    $scope.services = new JarvisServices();
     $scope.thermostat = new Thermostat($http);
+    $scope.readingList = new ReadingList();
+    $scope.services.add([
+        $scope.readingList,
+        $scope.thermostat
+    ]);
 }
 
