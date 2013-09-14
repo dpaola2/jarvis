@@ -36,7 +36,8 @@ function JarvisController ($scope, $http) {
             $scope.wit($scope.results, function(data) {
                 console.log("[JARVIS] Intent: " + data.outcome.intent);
                 var service_obj = $scope.services.lookup(data.outcome.intent);
-                var message = service_obj.send(data.outcome.intent);
+                console.log(data.outcome);
+                var message = service_obj.send(data.outcome.intent, data.outcome.entities);
 
                 $scope.result = message;
                 $scope.outcome = data.outcome;
