@@ -91,9 +91,11 @@ function JarvisController ($scope, $http) {
     $scope.services = new JarvisServices();
     $scope.thermostat = new Thermostat($http);
     $scope.readingList = new ReadingList();
+    $scope.weather = new WeatherService($http);
     $scope.services.add([
         $scope.readingList,
-        $scope.thermostat
+        $scope.thermostat,
+        $scope.weather
     ]);
 }
 
