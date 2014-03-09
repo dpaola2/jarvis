@@ -9,13 +9,19 @@ function JarvisController ($scope, $http) {
             var message = false;
 
             if (error.error == "network") {
-                message = "Sir, there seems to be a network error. I will be asleep.";
+                message = "There seems to be a network error. I will be asleep.";
                 stop = true;
             } else if (error.error == "no-speech") {
                 message = "Sir, let me know if you need me.";
                 stop = true;
             } else if (error.error == "aborted") {
+                message = "Aborted audio capture";
                 stop = true;
+            } else if (error.error == "audio-capture") {
+                message = "Audio capture error"
+                stop = true;
+            } else {
+                message = error.error
             }
             if (stop == true) {
                 $scope.$apply(function() {
@@ -72,7 +78,8 @@ function JarvisController ($scope, $http) {
     };
 
     $scope.say = function(message) {
-        speak(message, {pitch: 50, amplitude: 100, speed: 175}, function() {});
+        var msg = new SpeechSynthesisUtterance(message);
+        speechSynthesis.speak(msg);
     };
 
     $scope.startListening = function() {
