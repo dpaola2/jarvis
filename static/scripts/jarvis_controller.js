@@ -49,6 +49,7 @@ function JarvisController ($scope, $http) {
                 $scope.outcome = data.outcome;
                 $scope.stopListening();
                 $scope.say(message);
+                $scope.startListening();
             });
         };
 
